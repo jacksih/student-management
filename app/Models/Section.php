@@ -11,7 +11,7 @@ class Section extends Model
     protected $table = 'sections';
     protected $fillable = ['class_id', 'name'];
 
-    public function classes()
+    public function class()
     {
         return $this->belongsTo(Classes::class);
     }

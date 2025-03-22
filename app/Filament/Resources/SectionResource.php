@@ -4,20 +4,21 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Classes;
+use App\Models\Section;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\ClassesResource\Pages;
+use App\Filament\Resources\SectionResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\ClassesResource\RelationManagers;
+use App\Filament\Resources\SectionResource\RelationManagers;
 
-class ClassesResource extends Resource
+class SectionResource extends Resource
 {
-    protected static ?string $model = Classes::class;
+    protected static ?string $model = Section::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -25,6 +26,8 @@ class ClassesResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('class_id')
+                    ->relationship(name: 'class', titleAttribute: 'name'),
                 TextInput::make('name')
                     ->label('Name')
                     ->required(),
@@ -39,6 +42,10 @@ class ClassesResource extends Resource
                     ->label('Name')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('class.name')
+                    ->label('Class')
+                    ->searchable()
+                    ->sortable(),
             ])
             ->filters([
                 //
@@ -47,7 +54,7 @@ class ClassesResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
-                ->bulkActions([
+            ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
@@ -64,9 +71,9 @@ class ClassesResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListClasses::route('/'),
-            'create' => Pages\CreateClasses::route('/create'),
-            'edit' => Pages\EditClasses::route('/{record}/edit'),
+            'index' => Pages\ListSections::route('/'),
+            'create' => Pages\CreateSection::route('/create'),
+            'edit' => Pages\EditSection::route('/{record}/edit'),
         ];
     }
 }

@@ -11,12 +11,12 @@ class Student extends Model
     protected $table = 'students';
     protected $fillable = ['name', 'email', 'class_id', 'section_id'];
 
-    public function classes()
+    public function class()
     {
         return $this->belongsTo(Classes::class, 'class_id');
     }
 
-    public function sections()
+    public function section()
     {
         return $this->belongsTo(Section::class);
     }
