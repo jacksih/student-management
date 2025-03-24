@@ -10,10 +10,15 @@ use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Maatwebsite\Excel\Facades\Excel;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use App\Filament\Exports\StudentExporter;
+use Filament\Tables\Actions\ExportAction;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Filament\Tables\Actions\ExportBulkAction;
 use App\Filament\Resources\StudentResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\StudentResource\RelationManagers;
@@ -80,12 +85,27 @@ class StudentResource extends Resource
             ->filters([
                 //
             ])
+            ->headerActions([
+                ExportAction::make()
+                    ->icon('heroicon-o-folder-arrow-down')
+                    ->exporter(StudentExporter::class)
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                ExportAction::make()
+                    ->exporter(StudentExporter::class)
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->label('Export'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()
+                    ->exporter(StudentExporter::class)
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->label('Export'),
+
                 ]),
             ]);
     }
